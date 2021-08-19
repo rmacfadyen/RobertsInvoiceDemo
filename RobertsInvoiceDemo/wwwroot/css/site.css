@@ -1,0 +1,218 @@
+﻿/*
+ * middle align all cells to ensure that checkboxes are properly
+ * aligned with INPUT and SELECT elements
+ */
+table.EditableTable td {
+    vertical-align: middle;
+}
+
+/* No border around the footer (contains "add row" command) */
+table.EditableTable tfoot th {
+    border: none;
+}
+
+/*
+ * Nice underline for selects
+ *  - A select **must** be wrapped in a <div class=selectwrapper></div>.
+ *  - The table cell containing the wrapper must have class="position-relative"
+ *  - The reason why this is different from text inputs is because Bootstrap 5
+ *    uses background settings on SELECT elements to provider the downarrow. The
+ *    underline is done using background setttings... so there's a conflict.
+ *  - For why a wrapper is needed... see https://stackoverflow.com/questions/3532649/problem-with-select-and-after-with-css-in-webkit
+ */
+table.EditableTable .selectwrapper::before {
+    content: " ";
+    background-image: linear-gradient(to right, #b4babf, #b4babf);
+    background-position-x: 5px;
+    background-position-y: calc(100%);
+    background-size: calc(100% - 40px) 1px;
+    background-repeat: no-repeat;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 10px;
+    height: 1px;
+}
+
+table.EditableTable select {
+    background-color: transparent !important;
+}
+
+/*
+ * Nice underline for text inputs
+ */
+table.EditableTable input:not(.form-check-input) {
+    background: linear-gradient(to right, #b4babf, #b4babf) 5px calc(100% - 5px)/calc(100% - 10px) 1px no-repeat;
+}
+
+/*
+ * Cell containing the drag handle and delete button
+ */
+table.EditableTable td:nth-child(1) {
+    width: 3.75rem;
+    text-wrap: none;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/*
+ * The drag handle (normal, focus, disabled). Needs vertical align and 
+ * padding to make the focus ring the same height & position as its 
+ * neighboring delete button.
+ */
+table.EditableTable a.moverow {
+    cursor: move;
+    height: 38px;
+    display: inline-block;
+    vertical-align: middle;
+    padding-top: .25rem;
+}
+
+table.EditableTable a.moverow:focus {
+    outline: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+table.EditableTable a.moverow.disabled {
+    opacity: .65;
+    cursor: default;
+}
+
+/* Delete row button */
+table.EditableTable button.removerow {
+    color: red;
+    font-weight: bolder;
+}
+
+
+/* Buttons in an input group need their colors & borders set to override btn */
+button.btn.input-group-text {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+
+/*
+ * Date and time picker 
+ */
+.RobertsDatePickerDropdown {
+    position: fixed;
+    border: 1px solid #7F9DB9;
+    min-width: 230px;
+    background-color: white;
+    text-align: center;
+    padding-bottom: 4px;
+    z-index: 102;
+    border-collapse: collapse;
+}
+
+
+/* the divs that make up the grid of header/days */
+.RobertsDatePickerWeekRow DIV, 
+.RobertsDatePickerHeader DIV, 
+.RobertsDatePickerCalendarDayNames DIV {
+    display: inline-block;
+}
+
+/* the title section, above the calendar */
+.RobertsDatePickerHeader {
+    text-align: center;
+    line-height: 32px;
+    font-weight: bold;
+    margin-left: 3px;
+    margin-right: 2px;
+}
+
+/* position the next/prev months buttons */
+.RobertsDatePickerSelectPrevMonth {
+    float: left;
+}
+
+.RobertsDatePickerSelectNextMonth {
+    float: right;
+}
+
+/* the calendar container */
+.RobertsDatePickerCalendar {
+    clear: both;
+    display: table;
+    padding-right: 1em;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* the rows */
+.RobertsDatePickerCalendarDayNames, 
+.RobertsDatePickerWeekRow {
+    display: table-row;
+}
+
+/* the individual day names and days */
+.RobertsDatePickerCalendarDayNames DIV, 
+.RobertsDatePickerWeekRow DIV {
+    display: table-cell;
+    min-width: 32px;
+    text-align: right;
+}
+
+/* the day names text*/
+.RobertsDatePickerCalendarDayNames DIV SPAN {
+    padding-right: 4px;
+}
+
+/* a specific date selection */
+.RobertsDatePickerCalendar A {
+    display: inline-block;
+    text-decoration: none;
+    color: black !important; /* needs important because of the generic A rule at the bottom of this file */
+    min-width: 20px;
+    min-height: 25px;
+    line-height: 25px;
+    padding-right: 4px;
+    padding-left: 4px;
+}
+
+.RobertsDatePickerWeekRow DIV A:hover {
+    color: black !important;
+    background-color: #ccc;
+}
+
+/* for days in the prev/next month show then shaded */
+.RobertsDatePickerAnotherMonth A {
+    color: #ccc !important;
+}
+
+/* hightlight the current value */
+.RobertsDatePickerCurrentDate A {
+    background-color: #1E90FF;
+    color: white !important;
+}
+
+/* 
+ * remove the spinner from flagged number inputs 
+ *  - a spinner of .01 is pretty useless as a UI improvement even
+ *    though it ensures the field will only accept 2 decimal places
+ */
+input.nospinner::-webkit-outer-spin-button,
+input.nospinner::-webkit-inner-spin-button {
+    display: none;
+    -webkit-appearance: none;
+}
+
+input.nospinner {
+    -moz-appearance: textfield;
+}
+
+/* cheat the layout of the second header to avoid using colspan */
+#Invoice thead th:nth-child(2) {
+    position: relative;
+    left: -40px;
+}
+
+
+/* required field label */
+.required:after {
+    content: '\2731';
+    color: var(--bs-danger);
+}
