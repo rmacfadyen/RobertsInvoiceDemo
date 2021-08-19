@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roberts Invoice Demo</title>
+    <link rel="stylesheet" href="/lib/bootstrap5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body style="display: none">
+    <form autocomplete="off">
+        <div class="container">
+
+            <header class="text-center">
+                <h1>Robert's Invoice Demo</h1>
+                <p>
+                    This demo shows a grid entry for invoice line items. The grid starts
+                    with three empty line items to show the user that multiple entries are
+                    allowed, and that the underlined fields are where values can be entered.
+                    The "Add a row" link is positioned immediately below the rows so the 
+                    user knows that more rows can be added as needed.
+                </p>
+                <p>
+                    The demo also sneaks in an example of Robert's custom date and time 
+                    picker. The nice thing about this date time picker is that when time 
+                    entry is  configured the user can just type the date and then the 
+                    time. Or the user can pick a date and then add the time.
+                </p>
+                <p>
+                    The demo is built using typescript, jquery and jqueryui. While somewhat
+                    out of favor,  jqueryui's interactions, specifically sortable, are still
+                    top shelf.
+                </p>
+            </header>
+
+            <main role="main">
+
+
+                <div class="row mb-3">
+                    <div class="col-sm-4">
+                        <label for="InvoiceNumber" class="form-label fw-bold pr-1">Invoice #</label>
+                        <input type="text" id="InvoiceNumber" name="InvoiceNumber" class="form-control" placeholder="Blank to generate" autofocus />
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <label for="PreferredEComSupplier" class="form-label fw-bold pr-1 required">Pay using</label>
+                        <select id="PreferredEComSupplier" class="form-select">
+                            <option value=""></option>
+                            <option value="Stripe">Stripe</option>
+                            <option value="Invoice">Invoice</option>
+                        </select>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="CreatedOn" class="form-label fw-bold pr-1">Invoiced on</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="CreatedOn" name="CreatedOn" class="form-control" data-datetimepicker="true" placeholder="Blank for today" />
+                            <button type="button" class="input-group-text btn" aria-label="Choose date">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                                    <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <label for="PaymentDueOn" class="form-label fw-bold pr-1">Due on</label>
+                        <div class="input-group mb-3">
+                            <input type="text" id="PaymentDueOn" name="PaymentDueOn" class="form-control" data-datetimepicker="true" placeholder="Blank for 30 days from today"  />
+                            <button type="button" class="input-group-text btn" aria-label="Choose date">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
+                                    <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
+                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col">
+                        <table id="Invoice" class="EditableTable w-100" data-editable="true" data-editable-initial-lines="3" data-invoice="true">
+                            <thead class="fw-bold">
+                                <tr>
+                                    <th></th>
+                                    <th scope="col" class="ps-1">Item Sold or Requested</th>
+                                    <th scope="col" class="ps-1">Description</th>
+                                    <th scope="col" width="8%" class="ps-1">Qty</th>
+                                    <th scope="col" width="8%" class="ps-1">Price</th>
+                                    <th scope="col" width="8%" class="ps-1">Overide</th>
+                                    <th scope="col" width="8%" class="ps-1">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                  
+                                <tr>
+                                    <td class="border border-end-0 text-nowrap pe-1" style="width: 36px;">
+                                        <a class="moverow" href="#" title="Drag and drop to reposition row" aria-label="Use arrow keys to move row">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="24" fill="currentColor" class="bi bi-grip-vertical ms-1 me-1" viewBox="4 0 8 16">
+                                                <path d="M7 2a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM7 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-3 3a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                            </svg>
+                                        </a><button type="button" class="btn btn-link p-0 ps-1 fw-bold text-danger text-decoration-none removerow" title="Remove item">X</button>
+                                    </td>
+                                    <td class="border border-start-0 position-relative" width="20%">
+                                        <div class="selectwrapper">
+                                            <select id="LineItems_0__ItemCode" name="LineItems[0].ItemCode" class="form-select border-0 pl-0" aria-label="Item">
+                                                <option value=""></option>
+                                                <option value="c1">Coding</option>
+                                                <option value="c2">Consulting</option>
+                                                <option value="m1">Misc</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td class="border px-1"></td>
+                                    <td class="border"><input type="number" id="LineItems_0__Price" name="LineItems[0].Price" class="form-control border-0 pe-1" aria-label="Price" min="0" max="99" step="1" /></td>
+                                    <td class="border px-1"></td>
+                                    <td class="border"><input type="number" id="LineItems_0__Charge" name="LineItems[0].Charge" class="form-control border-0 pe-3 nospinner" aria-label="Charge" min="0" max="9999.99" step=".01" /></td>
+                                    <td class="border px-1"></td>
+                                </tr>
+
+                            </tbody>
+                            <tfoot class="mt-1">
+                                <tr>
+                                    <th colspan="2"><button type="button" href="#" class="fw-normal addrow btn btn-link mt-1">Add a row...</button></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-end border pe-1 border-end-0"><label class="fw-bold pr-1 mt-1 mb-1">Total:</label></th>
+                                    <th id="Total" class="border border-start-0 ps-1">0.00</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+
+                <div class="row pt-2 mb-5">
+                    <div class="col-4 offset-4">
+                        <button type="button" class="btn btn-primary w-100">Submit Order</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script src="/lib/jquery/jquery.min.js"></script>
+        <script defer src="/lib/jqueryui/jquery-ui.min.js"></script>
+        <script defer src="/lib/jquery-outside-events/jquery.ba-outside-events.min.js"></script>
+        <script defer src="/lib/bootstrap5/js/bootstrap.bundle.min.js"></script>
+        <script defer src="/lib/popper.js/umd/popper.min.js"></script>
+        <script defer src="/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script defer src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        <script defer src="/js/site.js"></script>
+        <script>
+            $(function () {
+                $('BODY').show();
+                $('INPUT[autofocus]').focus();
+            })
+        </script>
+    </form>
+</body>
+</html>
