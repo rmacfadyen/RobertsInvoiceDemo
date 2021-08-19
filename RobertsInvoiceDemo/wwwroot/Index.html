@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Roberts Invoice Demo</title>
-    <link rel="stylesheet" href="/lib/bootstrap5/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/css/bootstrap.min.css" integrity="sha512-F7WyTLiiiPqvu2pGumDR15med0MDkUIo5VTVyyfECR5DZmCnDhti9q5VID02ItWjq6fvDfMaBaDl2J3WdL1uxA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/css/site.css" />
 </head>
 <body style="display: none">
@@ -13,17 +13,17 @@
 
             <header class="text-center">
                 <h1>Robert's Invoice Demo</h1>
-                <p>
+            <!--    <p>
                     This demo shows a grid entry for invoice line items. The grid starts
                     with three empty line items to show the user that multiple entries are
                     allowed, and that the underlined fields are where values can be entered.
-                    The "Add a row" link is positioned immediately below the rows so the 
+                    The "Add a row" link is positioned immediately below the rows so the
                     user knows that more rows can be added as needed.
                 </p>
                 <p>
-                    The demo also sneaks in an example of Robert's custom date and time 
-                    picker. The nice thing about this date time picker is that when time 
-                    entry is  configured the user can just type the date and then the 
+                    The demo also sneaks in an example of Robert's custom date and time
+                    picker. The nice thing about this date time picker is that when time
+                    entry is  configured the user can just type the date and then the
                     time. Or the user can pick a date and then add the time.
                 </p>
                 <p>
@@ -31,6 +31,7 @@
                     out of favor,  jqueryui's interactions, specifically sortable, are still
                     top shelf.
                 </p>
+                -->
             </header>
 
             <main role="main">
@@ -69,7 +70,7 @@
                     <div class="col-sm-4">
                         <label for="PaymentDueOn" class="form-label fw-bold pr-1">Due on</label>
                         <div class="input-group mb-3">
-                            <input type="text" id="PaymentDueOn" name="PaymentDueOn" class="form-control" data-datetimepicker="true" placeholder="Blank for 30 days from today"  />
+                            <input type="text" id="PaymentDueOn" name="PaymentDueOn" class="form-control" data-datetimepicker="true" placeholder="Blank for 30 days from today" />
                             <button type="button" class="input-group-text btn" aria-label="Choose date">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-date" viewBox="0 0 16 16">
                                     <path d="M6.445 11.688V6.354h-.633A12.6 12.6 0 0 0 4.5 7.16v.695c.375-.257.969-.62 1.258-.777h.012v4.61h.675zm1.188-1.305c.047.64.594 1.406 1.703 1.406 1.258 0 2-1.066 2-2.871 0-1.934-.781-2.668-1.953-2.668-.926 0-1.797.672-1.797 1.809 0 1.16.824 1.77 1.676 1.77.746 0 1.23-.376 1.383-.79h.027c-.004 1.316-.461 2.164-1.305 2.164-.664 0-1.008-.45-1.05-.82h-.684zm2.953-2.317c0 .696-.559 1.18-1.184 1.18-.601 0-1.144-.383-1.144-1.2 0-.823.582-1.21 1.168-1.21.633 0 1.16.398 1.16 1.23z" />
@@ -98,7 +99,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                  
+
                                 <tr>
                                     <td class="border border-end-0 text-nowrap pe-1" style="width: 36px;">
                                         <a class="moverow" href="#" title="Drag and drop to reposition row" aria-label="Use arrow keys to move row">
@@ -142,24 +143,26 @@
 
                 <div class="row pt-2 mb-5">
                     <div class="col-4 offset-4">
-                        <button type="button" class="btn btn-primary w-100">Submit Order</button>
+                        <button id="SubmitOrder" type="button" class="btn btn-primary w-100">Submit Order</button>
                     </div>
                 </div>
             </main>
         </div>
 
-        <script src="/lib/jquery/jquery.min.js"></script>
-        <script defer src="/lib/jqueryui/jquery-ui.min.js"></script>
-        <script defer src="/lib/jquery-outside-events/jquery.ba-outside-events.min.js"></script>
-        <script defer src="/lib/bootstrap5/js/bootstrap.bundle.min.js"></script>
-        <script defer src="/lib/popper.js/umd/popper.min.js"></script>
-        <script defer src="/lib/jquery-validate/jquery.validate.min.js"></script>
-        <script defer src="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-        <script defer src="/js/site.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-outside-events/1.1/jquery.ba-outside-events.min.js" integrity="sha512-gWntOMO11f/9Nj429FV/JmIDyqURZ5PGI9V2vRCPJyzgBB5wIr8qJPcEH6HZL8bB4RJtxwH1od/hMGcMbgFQsQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js" integrity="sha512-XLo6bQe08irJObCc86rFEKQdcFYbGGIHVXcfMsxpbvF8ompmd1SNJjqVY5hmjQ01Ts0UmmSQGfqpt3fGjm6pGA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.min.js" integrity="sha512-NWNl2ZLgVBoi6lTcMsHgCQyrZVFnSmcaa3zRv0L3aoGXshwoxkGs3esa9zwQHsChGRL4aLDnJjJJeP6MjPX46Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>        
+        
+        <script src="js/site.js"></script>
         <script>
             $(function () {
                 $('BODY').show();
+
                 $('INPUT[autofocus]').focus();
+
+                $('#SubmitOrder').on('click', function () { alert('Order Accepted'); });
             })
         </script>
     </form>

@@ -36,7 +36,6 @@ class RobertsDateTimePicker {
             Format: string;
         }
     ) {
-
         $this
             .on('keydown', (e) => this.HandleKeyboardInTextbox(e))
             .parent().find('button').click((e) => this.DropdownButtonClickHandler(e))
@@ -64,6 +63,7 @@ class RobertsDateTimePicker {
     //  - Or if the calendar is already shown for this field hide the dropdown
     //
     DropdownButtonClickHandler(e: JQuery.Event) {
+
         //
         // Stop this event from propegating so the clickoutside/focusoutside events
         // don't pick it up and immediatly close the dropdown
