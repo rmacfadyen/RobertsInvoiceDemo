@@ -14,3 +14,5 @@ time. Or the user can pick a date and then add the time.
 The demo is built using typescript, jquery and jqueryui. While somewhat
 out of favor,  jqueryui's interactions, specifically sortable, are still
 top shelf.
+
+[LIVE DEMO](https://rmacfadyen.github.io/RobertsInvoiceDemo)
