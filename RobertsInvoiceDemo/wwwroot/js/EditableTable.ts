@@ -322,6 +322,11 @@
                 //
                 this.RenumberElements();
                 this.SetUi();
+
+                //
+                // Let interested parties know a row was deleted
+                //
+                $(this.table).trigger('rowdeleted');
             });
     }
 

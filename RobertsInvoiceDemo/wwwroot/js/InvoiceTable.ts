@@ -5,11 +5,52 @@
 //
 
 class InvoiceTable {
+
+    //
+    // Bind the necesary events
+    //
     constructor(public invTable: HTMLTableElement) {
         $(invTable).on('change', 'SELECT', (e) => this.ChangeProduct($(e.target).closest('TR')));
-        $(invTable).on('change', 'INPUT', (e) => this.ChangeQtyOrCharge($(e.target).closest('TR')));
+        $(invTable).on('change', 'INPUT', (e) => this.ChangeQtyOrOverride($(e.target).closest('TR')));
+        $(invTable).on('keypress', 'INPUT', (e) => this.RestrictToNumber(e));
+        $(invTable).on('paste', 'INPUT', (e) => this.RestrictPasteToNumber(e));
+        $(invTable).on('rowdeleted', (e) => this.UpdateInvoiceTotal());
     }
 
+
+    //
+    // Don't allow exponent style of numbers
+    //
+    private RestrictPasteToNumber(e) {
+        //
+        // What was pasted
+        //
+        var p = (e.originalEvent as any).clipboardData.getData('text') as string;
+
+        //
+        // Check for invalid characters. The browser itself will drop invalid
+        // characters from the paste... except for e/E.
+        //
+        if (p.indexOf('e') || p.indexOf('E')) {
+            e.preventDefault();
+        }
+    }
+
+
+    //
+    // Don't allow exponent style of numbers (1.65e23) 
+    //
+    private RestrictToNumber(e: JQuery.KeyPressEvent) {
+        if (e.key === 'e') {
+            e.preventDefault();
+        }
+    }
+
+
+    //
+    // When a product has been selected
+    //  - Could be blank
+    //
     private ChangeProduct(Row: JQuery) {
         var Product = Row.find('SELECT').val() as string;
 
@@ -27,21 +68,27 @@ class InvoiceTable {
         }
 
         this.UpdateRowTotal(Row, ProductDetails);
-        this.UpdateOrderTotal();
+        this.UpdateInvoiceTotal();
     }
 
 
-    private ChangeQtyOrCharge(Row: JQuery) {
+    //
+    // When ether the qty or price override amount has changed
+    //
+    private ChangeQtyOrOverride(Row: JQuery) {
 
         var Product = $(Row).find('SELECT').val() as string;
 
         var ProductDetails = this.LookupProduct(Product);
 
         this.UpdateRowTotal(Row, ProductDetails);
-        this.UpdateOrderTotal();
+        this.UpdateInvoiceTotal();
     }
 
 
+    //
+    // Fake product database/lookup
+    //
     private LookupProduct(ProductCode: string) {
         var ProductsDb = {
             "c1": {
@@ -62,22 +109,41 @@ class InvoiceTable {
     }
 
 
+    //
+    // Update the row total
+    //
     private UpdateRowTotal(Row, ProductDetails) {
+        //
+        // Ignore blank product
+        //
+        if (!ProductDetails) {
+            return;
+        }
+
+        //
+        // Get the controls for the qty, override and row total
+        //
         var Qty = Row.find('td:nth-child(4) input').val();
-        var Charge = Row.find('td:nth-child(6) input').val();
+        var PriceOverride = Row.find('td:nth-child(6) input').val();
         var Total = Row.find('td:last-child');
 
+        //
+        // Get the amounts as numbers
+        //
         var QtyAmt = (Qty === '' ? 0 : parseFloat(Qty));
-        var ChargeAmt = (Charge === '' ? 0 : parseFloat(Charge));
+        var PriceOverrideAmt = (PriceOverride === '' ? 0 : parseFloat(PriceOverride));
         var PriceAmt = ProductDetails.UnitCost;
 
-        if (QtyAmt <= 0 || ChargeAmt < 0) {
+        //
+        // Calculate the total
+        //
+        if (QtyAmt <= 0 || PriceOverrideAmt < 0) {
             Total.html('');
         }
         else {
             var TotalAmt;
-            if (ChargeAmt !== 0) {
-                TotalAmt = Qty * ChargeAmt;
+            if (PriceOverrideAmt !== 0) {
+                TotalAmt = Qty * PriceOverrideAmt;
             }
             else {
                 TotalAmt = Qty * PriceAmt;
@@ -87,7 +153,11 @@ class InvoiceTable {
         }
     }
 
-    private UpdateOrderTotal() {
+
+    //
+    // Add up all the invoice rows and update the total
+    //
+    private UpdateInvoiceTotal() {
         var Total = 0;
         $('tbody tr td:last-child', this.invTable).each(function (_, elm) {
             var Value = $(elm).html();
@@ -98,7 +168,6 @@ class InvoiceTable {
 
         $('#Total').html(Total.toFixed(2));
     }
-
 }
 
 
