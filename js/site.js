@@ -668,6 +668,10 @@ var EditableTable = /** @class */ (function () {
             //
             _this.RenumberElements();
             _this.SetUi();
+            //
+            // Let interested parties know a row was deleted
+            //
+            $(_this.table).trigger('rowdeleted');
         });
     };
     //
@@ -774,12 +778,46 @@ $(function () {
 //    editing design.
 //
 var InvoiceTable = /** @class */ (function () {
+    //
+    // Bind the necesary events
+    //
     function InvoiceTable(invTable) {
         var _this = this;
         this.invTable = invTable;
         $(invTable).on('change', 'SELECT', function (e) { return _this.ChangeProduct($(e.target).closest('TR')); });
-        $(invTable).on('change', 'INPUT', function (e) { return _this.ChangeQtyOrCharge($(e.target).closest('TR')); });
+        $(invTable).on('change', 'INPUT', function (e) { return _this.ChangeQtyOrOverride($(e.target).closest('TR')); });
+        $(invTable).on('keypress', 'INPUT', function (e) { return _this.RestrictToNumber(e); });
+        $(invTable).on('paste', 'INPUT', function (e) { return _this.RestrictPasteToNumber(e); });
+        $(invTable).on('rowdeleted', function (e) { return _this.UpdateInvoiceTotal(); });
     }
+    //
+    // Don't allow exponent style of numbers
+    //
+    InvoiceTable.prototype.RestrictPasteToNumber = function (e) {
+        //
+        // What was pasted
+        //
+        var p = e.originalEvent.clipboardData.getData('text');
+        //
+        // Check for invalid characters. The browser itself will drop invalid
+        // characters from the paste... except for e/E.
+        //
+        if (p.indexOf('e') || p.indexOf('E')) {
+            e.preventDefault();
+        }
+    };
+    //
+    // Don't allow exponent style of numbers (1.65e23) 
+    //
+    InvoiceTable.prototype.RestrictToNumber = function (e) {
+        if (e.key === 'e') {
+            e.preventDefault();
+        }
+    };
+    //
+    // When a product has been selected
+    //  - Could be blank
+    //
     InvoiceTable.prototype.ChangeProduct = function (Row) {
         var Product = Row.find('SELECT').val();
         var ProductDetails = this.LookupProduct(Product);
@@ -794,14 +832,20 @@ var InvoiceTable = /** @class */ (function () {
             Row.find('TD:nth-child(5)').html(ProductDetails.UnitCost.toFixed(2));
         }
         this.UpdateRowTotal(Row, ProductDetails);
-        this.UpdateOrderTotal();
+        this.UpdateInvoiceTotal();
     };
-    InvoiceTable.prototype.ChangeQtyOrCharge = function (Row) {
+    //
+    // When ether the qty or price override amount has changed
+    //
+    InvoiceTable.prototype.ChangeQtyOrOverride = function (Row) {
         var Product = $(Row).find('SELECT').val();
         var ProductDetails = this.LookupProduct(Product);
         this.UpdateRowTotal(Row, ProductDetails);
-        this.UpdateOrderTotal();
+        this.UpdateInvoiceTotal();
     };
+    //
+    // Fake product database/lookup
+    //
     InvoiceTable.prototype.LookupProduct = function (ProductCode) {
         var ProductsDb = {
             "c1": {
@@ -819,20 +863,38 @@ var InvoiceTable = /** @class */ (function () {
         };
         return ProductsDb[ProductCode];
     };
+    //
+    // Update the row total
+    //
     InvoiceTable.prototype.UpdateRowTotal = function (Row, ProductDetails) {
+        //
+        // Ignore blank product
+        //
+        if (!ProductDetails) {
+            return;
+        }
+        //
+        // Get the controls for the qty, override and row total
+        //
         var Qty = Row.find('td:nth-child(4) input').val();
-        var Charge = Row.find('td:nth-child(6) input').val();
+        var PriceOverride = Row.find('td:nth-child(6) input').val();
         var Total = Row.find('td:last-child');
+        //
+        // Get the amounts as numbers
+        //
         var QtyAmt = (Qty === '' ? 0 : parseFloat(Qty));
-        var ChargeAmt = (Charge === '' ? 0 : parseFloat(Charge));
+        var PriceOverrideAmt = (PriceOverride === '' ? 0 : parseFloat(PriceOverride));
         var PriceAmt = ProductDetails.UnitCost;
-        if (QtyAmt <= 0 || ChargeAmt < 0) {
+        //
+        // Calculate the total
+        //
+        if (QtyAmt <= 0 || PriceOverrideAmt < 0) {
             Total.html('');
         }
         else {
             var TotalAmt;
-            if (ChargeAmt !== 0) {
-                TotalAmt = Qty * ChargeAmt;
+            if (PriceOverrideAmt !== 0) {
+                TotalAmt = Qty * PriceOverrideAmt;
             }
             else {
                 TotalAmt = Qty * PriceAmt;
@@ -840,7 +902,10 @@ var InvoiceTable = /** @class */ (function () {
             Total.html(TotalAmt.toFixed(2));
         }
     };
-    InvoiceTable.prototype.UpdateOrderTotal = function () {
+    //
+    // Add up all the invoice rows and update the total
+    //
+    InvoiceTable.prototype.UpdateInvoiceTotal = function () {
         var Total = 0;
         $('tbody tr td:last-child', this.invTable).each(function (_, elm) {
             var Value = $(elm).html();
